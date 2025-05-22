@@ -1,24 +1,51 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Hamburger Menu Toggle
+  // Hamburger Menu Toggle with Animation
   const hamburger = document.querySelector(".hamburger");
   const navLinks = document.querySelector(".nav-links");
+  const links = document.querySelectorAll(".nav-link");
+  let isMenuOpen = false;
 
   if (hamburger && navLinks) {
     hamburger.addEventListener("click", () => {
+      isMenuOpen = !isMenuOpen;
       navLinks.classList.toggle("active");
+      hamburger.innerHTML = isMenuOpen ? "×" : "☰";
+      
+      // Animate hamburger
+      hamburger.style.transform = isMenuOpen ? "rotate(90deg)" : "rotate(0)";
+      
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = isMenuOpen ? "hidden" : "auto";
+      
+      // Close menu when clicking a link
+      links.forEach(link => {
+        link.addEventListener("click", () => {
+          navLinks.classList.remove("active");
+          hamburger.innerHTML = "☰";
+          hamburger.style.transform = "rotate(0)";
+          document.body.style.overflow = "auto";
+          isMenuOpen = false;
+        });
+      });
     });
   } else {
     console.error("Hamburger or nav-links not found in the DOM");
   }
 
-  // Theme Switcher
+  // Theme Switcher with Enhanced Animation
   const themeToggle = document.querySelector(".theme-toggle");
   if (themeToggle) {
     themeToggle.addEventListener("click", () => {
       document.body.classList.toggle("light-mode");
-      themeToggle.innerHTML = document.body.classList.contains("light-mode")
-        ? '<i class="fas fa-sun"></i>'
-        : '<i class="fas fa-moon"></i>';
+      
+      // Animate icon switch
+      themeToggle.style.transform = "rotate(360deg) scale(0.5)";
+      setTimeout(() => {
+        themeToggle.innerHTML = document.body.classList.contains("light-mode")
+          ? '<i class="fas fa-sun"></i>'
+          : '<i class="fas fa-moon"></i>';
+        themeToggle.style.transform = "rotate(0) scale(1)";
+      }, 150);
     });
   } else {
     console.error("Theme toggle not found in the DOM");
@@ -55,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Typewriter element not found in the DOM");
   }
+
   // Name Reveal on Hover
   const nameReveal = document.getElementById("name-reveal");
   if (nameReveal) {
